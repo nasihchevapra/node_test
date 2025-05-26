@@ -1,78 +1,32 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const http = require('http');
-// const socketIo = require('socket.io');
-// const cors = require('cors');
-
-// const app = express();
-// const server = http.createServer(app);
-// const io = socketIo(server, {
-//   cors: { origin: '*' }
-// });
-
-// app.use(cors());
-// app.use(express.json());
-
-// mongoose.connect('mongodb+srv://nasih_chevapra:nasih%40MongoDB00@cluster0.hj7x5to.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// }).then(() => console.log("Connected to MongoDB"))
-//   .catch((err) => console.error(err));
-
-// const ItemSchema = new mongoose.Schema({
-//   name: String,
-//   quantity: Number,
-// });
-
-// const Item = mongoose.model('Item', ItemSchema);
-
-// app.get('/items', async (req, res) => {
-//   const items = await Item.find();
-//   res.json(items);
-// });
-
-// app.post('/items', async (req, res) => {
-//   const item = new Item(req.body);
-//   await item.save();
-//   io.emit('item_added', item); // real-time update
-//   res.status(201).json(item);
-// });
-
-// io.on('connection', (socket) => {
-//   console.log('A client connected:', socket.id);
-// });
-
-// const PORT = process.env.PORT || 5000;
-// server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+//mongodb+srv://nasih_chevapra:nasih%40MongoDB00@cluster0.hj7x5to.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0e
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ MongoDB setup
-mongoose.connect('mongodb+srv://nasih_chevapra:nasih%40MongoDB00@cluster0.hj7x5to.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0e')
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error(err));
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch((err) => console.error('❌ MongoDB connection error:', err));
 
-// ✅ Item schema and model
-const itemSchema = new mongoose.Schema({
-  name: String
-});
-const Item = mongoose.model('Item', itemSchema);
+// Routes
+const itemRoutes = require('./routes/items');
+app.use('/items', itemRoutes);
 
-// ✅ API route: GET /items
-app.get('/items', async (req, res) => {
-  const items = await Item.find();
-  res.json(items);
+// Root Route
+app.get('/', (req, res) => {
+  res.send('API is working ✅');
 });
 
-// ✅ Start server
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

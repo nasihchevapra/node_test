@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Item = require('../models/Item');
+const Item = require('c:/Users/dell/Desktop/nod/test/models/item');
 
 // GET all items
 router.get('/', async (req, res) => {

@@ -12,7 +12,7 @@
       "mongoose": "^8.15.0",
       "socket.io": "^4.8.1"
     },
-    "name": "node-test",
+    "name": "node_test",
     "version": "1.0.0",
     "description": "Sample Node.js + Express + MongoDB CRUD API",
     "main": "index.js",
